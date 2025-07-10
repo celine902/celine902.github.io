@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="环境设计作品集 - 袁芷彤设计展示">
+    <meta name="theme-color" content="#000000">
+    <title>设计作品集 | 袁芷彤 YuanZhitong</title>
+    <link rel="manifest" href="/manifest.json">
+    <style>
+        :root {
+            --primary-color: #000;
+            --secondary-color: #fff;
+            --accent-color: #ff3b30;
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            overflow-x: hidden;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            mix-blend-mode: difference;
+            color: var(--secondary-color);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: inherit;
+            text-decoration: none;
+            position: relative;
+            padding-bottom: 2px;
+            font-size: 14px;
+            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 1px;
+            background: currentColor;
+            transition: width var(--transition-speed) ease;
+        }
+
+        .nav-links a:hover:after {
+            width: 100%;
+        }
+
+        /* 主内容区网格布局 */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 0;
+            margin-top: 80px;
+        }
+
+        .grid-item {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 4/5;
+            background: #eee;
+            cursor: pointer;
+            transition: transform var(--transition-speed);
+        }
+
+        .grid-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .grid-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .grid-item:hover .grid-img {
+            transform: scale(1.05);
+        }
+
+        .item-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 25px;
+            opacity: 0;
+            transition: opacity var(--transition-speed);
+            color: var(--secondary-color);
+        }
+
+        .grid-item:hover .item-overlay {
+            opacity: 1;
+        }
+
+        .project-title {
+            font-size: 22px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .project-category {
+            font-size: 14px;
+            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* 模态框样式 - 恢复原始设计 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            overflow: auto;
+            padding: 60px;
+        }
+
+        .modal-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            color: #fff;
+        }
+
+        .close-modal {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            font-size: 30px;
+            color: #fff;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .modal-img {
+            width: 100%;
+            max-height: 80vh;
+            object-fit: contain;
+            margin-bottom: 30px;
+        }
+
+        .modal-info {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .modal-title {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .modal-desc {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .modal-date {
+            font-size: 16px;
+            font-style: italic;
+            opacity: 0.7;
+        }
+
+        /* 图片展示区域 - 在项目信息下方 */
+        .image-gallery {
+            width: 100%;
+            margin-top: 50px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .gallery-item {
+            height: 300px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.03);
+        }
+
+        .gallery-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* 页脚样式 */
+        .footer {
+            padding: 80px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #ddd;
+        }
+
+        .contact-info h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .contact-info p {
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-speed);
+        }
+
+        .social-icon:hover {
+            background: var(--primary-color);
+            color: var(--secondary-color);
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+            
+            .portfolio-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+            
+            .modal {
+                padding: 20px;
+            }
+            
+            .footer {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 30px;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .gallery-item {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="logo">YUAN'S PORTFOLIO</div>
+        <div class="nav-links">
+            <a href="#home">主页</a>
+            <a href="#projects">作品集</a>
+            <a href="#about">关于</a>
+            <a href="#contact">联系</a>
+        </div>
+    </nav>
+
+    <!-- 作品集网格布局 -->
+    <section class="portfolio-grid" id="projects">
+        <!-- 项目1 -->
+        <div class="grid-item" data-id="project1">
+            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGRlc2lnbnxlbnwwfHwwfHx8MA%3D%3D" alt="文化主题景观叙事" class="grid-img">
+            <div class="item-overlay">
+                <h3 class="project-title">文化主题景观叙事</h3>
+                <div class="project-category">岭南文化园博会设计</div>
+            </div>
+        </div>
+        
+        <!-- 项目2 -->
+        <div class="grid-item" data-id="project2">
+            <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8ZGVzaWdufGVufDB8fDB8fHww" alt="在地博馆文化筑建" class="grid-img">
+            <div class="item-overlay">
+                <h3 class="project-title">在地博馆文化筑建</h3>
+                <div class="project-category">中草药博物馆</div>
+            </div>
+        </div>
+        
+        <!-- 项目3 -->
+        <div class="grid-item" data-id="project3">
+            <img src="https://images.unsplash.com/photo-1467232004584-a241de8b46c3?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c3RyZWV0JTIwZGVzaWdufGVufDB8fDB8fHww" alt="历史街区活化再生" class="grid-img">
+            <div class="item-overlay">
+                <h3 class="project-title">历史街区活化再生</h3>
+                <div class="project-category">广州市犀牛路街道改造</div>
+            </div>
+        </div>
+        
+        <!-- 项目4 -->
+        <div class="grid-item" data-id="project4">
+            <img src="https://images.unsplash.com/photo-1561070791-2526d45794b6?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTh8fGRlc2lnbnxlbnwwfHwwfHx8MA%3D%3D" alt="商业空间行为引导" class="grid-img">
+            <div class="item-overlay">
+                <h3 class="project-title">商业空间行为引导</h3>
+                <div class="project-category">广州市东莞庄路段商业空间设计</div>
+            </div>
+        </div>
+        
+        <!-- 项目5 -->
+        <div class="grid-item" data-id="project5">
+            <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8cGFja2FnaW5nfGVufDB8fDB8fHww" alt="文教建筑空间营造" class="grid-img">
+            <div class="item-overlay">
+                <h3 class="project-title">文教建筑空间营造</h3>
+                <div class="project-category">广东工业大学展览馆设计</div>
+            </div>
+        </div>
+        
+        <!-- 项目6 -->
+        <div class="grid-item" data-id="project6">
+            <img src="https://images.unsplash.com/photo-1576595768827-6f4a70b5f7dc?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fHBvc3RlcnxlbnwwfHwwfHx8MA%3D%3D" alt="可持续跨学科实践" class="grid-img">
+            <div class="item-overlay">
+                <h3 class="project-title">可持续跨学科实践</h3>
+                <div class="project-category">可持续穿戴AI设计</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 项目模态框 -->
+    <div id="projectModal" class="modal">
+        <span class="close-modal">&times;</span>
+        <div class="modal-content">
+            <!-- 项目主图 -->
+            <img id="modalMainImg" class="modal-img" src="" alt="项目主图">
+            
+            <!-- 项目信息 -->
+            <div class="modal-info">
+                <h2 id="modalTitle" class="modal-title">项目名称</h2>
+                <p id="modalDesc" class="modal-desc">项目详细描述将在此处展示...</p>
+                <p id="modalDate" class="modal-date">2023</p>
+            </div>
+            
+            <!-- 图片展示区域 -->
+            <div class="image-gallery">
+                <div id="galleryGrid" class="gallery-grid">
+                    <!-- 图片将通过JavaScript动态添加 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚/联系信息 -->
+    <footer class="footer" id="contact">
+        <div class="contact-info">
+            <h2>联系我</h2>
+            <p>邮件: 1658700677@qq.com</p>
+            <p>电话: 13680160484</p>
+            <p>地址: 创意设计中心, 数字城市</p>
+        </div>
+        <div class="social-links">
+            <a href="#" class="social-icon">fb</a>
+            <a href="#" class="social-icon">in</a>
+            <a href="#" class="social-icon">ig</a>
+            <a href="#" class="social-icon">tw</a>
+        </div>
+    </footer>
+
+    <script>
+        // 项目详细信息
+        const projects = {
+            project1: {
+                title: "岭南文化园博会设计",
+                mainImg: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGRlc2lnbnxlbnwwfHwwfHx8MA%3D%3D",
+                images: [
+                    "https://images.unsplash.com/photo-1584634731339-252c581abfc5?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fHBhcmslMjBkZXNpZ258ZW58MHx8MHx8fDA%3D",
+                    "https://images.unsplash.com/photo-1560703650-76bb0b481b15?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGdhcmRlbiUyMGRlc2lnbnxlbnwwfHwwfHx8MA%3D%3D",
+                    "https://images.unsplash.com/photo-1560717789-0ac7c58ac90a?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y2hpbmVzZSUyMGdhcmRlbnxlbnwwfHwwfHx8MA%3D%3D"
+                ],
+                desc: "岭南文化园博会设计项目融合了传统岭南园林艺术与现代景观设计理念，打造了一个集文化展示、休闲娱乐与生态保护于一体的公共空间。项目占地约5公顷，包含传统园林区、现代艺术展示区和水景生态区三大功能区。设计充分考虑了岭南地区的气候特点，采用大量本土植物和传统建筑材料，创造出既具有地域特色又符合现代审美的园林空间。",
+                date: "2023年6月完成"
+            },
+            project2: {
+                title: "中草药博物馆",
+                mainImg: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8ZGVzaWdufGVufDB8fDB8fHww",
+                images: [
+                    "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bXVzZXVtJTIwZGVzaWdufGVufDB8fDB8fHww",
+                    "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8aW50ZXJpb3IlMjBkZXNpZ258ZW58MHx8MHx8fDA%3D",
+                    "https://images.unsplash.com/photo-1556228720-195a672e3a07?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8aGVyYmFsJTIwZ2FyZGVufGVufDB8fDB8fHww"
+                ],
+                desc: "中草药博物馆设计项目旨在展示中国传统医药文化的精髓。建筑外观采用现代解构主义手法，内部空间则融合了传统中药铺的元素与现代展览技术。博物馆分为历史展区、药材标本区、互动体验区和研究教育区四大功能区。设计特别注重空间氛围的营造，通过光影、材质和色彩的精心搭配，创造出既庄重又富有教育意义的展览环境。",
+                date: "2023年3月完成"
+            },
+            project3: {
+                title: "广州市犀牛路街道改造",
+                mainImg: "https://images.unsplash.com/photo-1467232004584-a241de8b46c3?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c3RyZWV0JTIwZGVzaWdufGVufDB8fDB8fHww",
+                images: [
+                    "https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXJiYW4lMjByZW5ld2FsfGVufDB8fDB8fHww",
+                    "https://images.unsplash.com/photo-1584634731339-252c581abfc5?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fHBhcmslMjBkZXNpZ258ZW58MHx8MHx8fDA%3D",
+                    "https://images.unsplash.com/photo-1479839672679-a46483c0e7c8?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cHVibGljJTIwc3BhY2V8ZW58MHx8MHx8fDA%3D"
+                ],
+                desc: "广州市犀牛路街道改造项目是对历史街区进行活化再生的典型案例。项目保留了原有的历史建筑风貌，同时引入了现代化的公共设施和商业空间。改造内容包括街道铺装更新、绿化系统升级、历史建筑修缮和公共艺术装置设置。设计特别注重步行体验，拓宽了人行道，增加了休息设施和景观节点，使整个街区既保留了历史韵味，又满足了现代城市生活的需求。",
+                date: "2025年6月完成"
+            },
+            project4: {
+                title: "广州市东莞庄路段商业空间设计",
+                mainImg: "https://images.unsplash.com/photo-1561070791-2526d45794b6?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTh8fGRlc2lnbnxlbnwwfHwwfHx8MA%3D%3D",
+                images: [
+                    "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y29tbWVyY2lhbCUyMGRlc2lnbnxlbnwwfHwwfHx8MA%3D%3D",
+                    "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cmV0YWlsJTIwc3BhY2V8ZW58MHx8MHx8fDA%3D",
+                    "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8aW50ZXJpb3IlMjBkZXNpZ258ZW58MHx8MHx8fDA%3D"
+                ],
+                desc: "东莞庄路段商业空间设计项目旨在打造一个集购物、餐饮、休闲和文化体验于一体的综合性商业街区。设计采用开放式街区布局，通过连廊、广场和景观节点将各个商业体有机连接。建筑立面采用现代简约风格，同时融入岭南建筑元素，如坡屋顶、格栅和庭院空间。商业空间内部注重流线设计和空间体验，通过光影、材质和色彩的精心搭配，创造出舒适而富有活力的商业环境。",
+                date: "2022年11月完成"
+            },
+            project5: {
+                title: "广东工业大学展览馆设计",
+                mainImg: "https://images.unsplash.com/photo-1553877522-43269d4ea984?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8cGFja2FnaW5nfGVufDB8fDB8fHww",
+                images: [
+                    "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bXVzZXVtJTIwZGVzaWdufGVufDB8fDB8fHww",
+                    "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8aW50ZXJpb3IlMjBkZXNpZ258ZW58MHx8MHx8fDA%3D",
+                    "https://images.unsplash.com/photo-1588880331179-bc9b93a8cb5e?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZXhoaWJpdGlvbiUyMGhhbGx8ZW58MHx8MHx8fDA%3D"
+                ],
+                desc: "广东工业大学展览馆设计项目是一个集教学、展览和研究功能于一体的综合性空间。建筑外观采用现代简约风格，内部空间则注重灵活性和多功能性。展览馆分为常设展区、临时展区、学术报告厅和研究工作室四大功能区。设计特别注重自然采光和通风，通过巧妙的天窗设计和立面开窗，创造出明亮而节能的室内环境。展览空间采用模块化设计，可根据不同展览需求灵活调整布局。",
+                date: "2022年9月完成"
+            },
+            project6: {
+                title: "可持续穿戴AI设计",
+                mainImg: "https://images.unsplash.com/photo-1576595768827-6f4a70b5f7dc?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fHBvc3RlcnxlbnwwfHwwfHx8MA%3D%3D",
+                images: [
+                    "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YWklMjBkZXNpZ258ZW58MHx8MHx8fDA%3D",
+                    "https://images.unsplash.com/photo-1551650975-87deedd944c3?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8d2VhcmFibGUlMjB0ZWNobm9sb2d5fGVufDB8fDB8fHww",
+                    "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c3VzdGFpbmFibGUlMjBkZXNpZ258ZW58MHx8MHx8fDA%3D"
+                ],
+                desc: "可持续穿戴AI设计项目探索了科技与可持续发展的结合点。设计包括一系列可穿戴设备，如智能手环、健康监测服装和环境感知配件。这些设备采用环保材料制造，如回收塑料、有机棉和生物基材料，同时集成了人工智能技术，能够实时监测用户健康和环境数据。设计注重用户体验，通过简洁的界面设计和舒适的人体工学，使科技产品既实用又美观。",
+                date: "2022年8月完成"
+            }
+        };
+
+        // 模态框功能
+        const gridItems = document.querySelectorAll('.grid-item');
+        const modal = document.getElementById('projectModal');
+        const modalMainImg = document.getElementById('modalMainImg');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalDesc = document.getElementById('modalDesc');
+        const modalDate = document.getElementById('modalDate');
+        const closeModal = document.querySelector('.close-modal');
+        const galleryGrid = document.getElementById('galleryGrid');
+        
+        // 点击网格项目打开模态框
+        gridItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const projectId = item.getAttribute('data-id');
+                const project = projects[projectId];
+                
+                if (project) {
+                    // 设置主图
+                    modalMainImg.src = project.mainImg;
+                    modalMainImg.alt = project.title;
+                    
+                    // 设置项目信息
+                    modalTitle.textContent = project.title;
+                    modalDesc.textContent = project.desc;
+                    modalDate.textContent = project.date;
+                    
+                    // 清空现有图片
+                    galleryGrid.innerHTML = '';
+                    
+                    // 添加所有项目图片
+                    project.images.forEach((src, index) => {
+                        const galleryItem = document.createElement('div');
+                        galleryItem.classList.add('gallery-item');
+                        
+                        const img = document.createElement('img');
+                        img.src = src;
+                        img.alt = `${project.title} 图片 ${index + 1}`;
+                        img.classList.add('gallery-img');
+                        
+                        galleryItem.appendChild(img);
+                        galleryGrid.appendChild(galleryItem);
+                    });
+                    
+                    modal.style.display = 'block';
+                    document.body.style.overflow = 'hidden';
+                }
+            });
+        });
+        
+        // 关闭模态框
+        function closeProjectModal() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        closeModal.addEventListener('click', closeProjectModal);
+        
+        // 点击模态框外部关闭
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeProjectModal();
+            }
+        });
+        
+        // 注册Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('Service Worker 注册成功: ', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('Service Worker 注册失败: ', error);
+                    });
+            });
+        }
+        
+        // PWA安装提示
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            const installPrompt = e;
+            const installBtn = document.createElement('button');
+            installBtn.textContent = '安装应用';
+            installBtn.classList.add('install-btn');
+            document.querySelector('.navbar').appendChild(installBtn);
+            
+            installBtn.addEventListener('click', () => {
+                installPrompt.prompt();
+                installBtn.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
