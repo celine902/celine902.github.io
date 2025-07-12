@@ -181,6 +181,12 @@
             max-height: 80vh;
             object-fit: contain;
             margin-bottom: 30px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .modal-img:hover {
+            transform: scale(1.02);
         }
 
         .modal-info {
@@ -223,6 +229,7 @@
             height: 300px;
             overflow: hidden;
             transition: transform 0.3s ease;
+            cursor: pointer;
         }
 
         .gallery-item:hover {
@@ -233,6 +240,48 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        /* 图片放大模态框 */
+        .image-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            overflow: auto;
+            padding: 20px;
+        }
+
+        .image-modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90vh;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-modal-img {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+            cursor: zoom-out;
+        }
+
+        .close-image-modal {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            font-size: 30px;
+            color: #fff;
+            cursor: pointer;
+            z-index: 2001;
         }
 
         /* 页脚样式 */
@@ -303,6 +352,10 @@
             .gallery-item {
                 height: 250px;
             }
+            
+            .image-modal-content {
+                max-width: 95%;
+            }
         }
     </style>
 </head>
@@ -331,16 +384,16 @@
         
         <!-- 项目2 -->
         <div class="grid-item" data-id="project2">
-            <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8ZGVzaWdufGVufDB8fDB8fHww" alt="在地博馆文化筑建" class="grid-img">
+            <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&auto=format&fit=crop&q=60&ixlib=极rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8ZGVzaWdufGVufDB8fDB8fHww" alt="在地博馆文化筑建" class="grid-img">
             <div class="item-overlay">
                 <h3 class="project-title">在地博馆文化筑建</h3>
                 <div class="project-category">中草药博物馆</div>
-            </div>
+            </极div>
         </div>
         
         <!-- 项目3 -->
         <div class="grid-item" data-id="project3">
-            <img src="https://images.unsplash.com/photo-1467232004584-a241de8b46c3?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c3RyZWV0JTIwZGVzaWdufGVufDB8fDB8fHww" alt="历史街区活化再生" class="grid-img">
+            <img src="https://s3.bmp.ovh/imgs/2025/07/12/2e5d63b73c0dff73.jpg" alt="历史街区活化再生" class="grid-img">
             <div class="item-overlay">
                 <h3 class="project-title">历史街区活化再生</h3>
                 <div class="project-category">广州市犀牛路街道改造</div>
@@ -398,6 +451,14 @@
         </div>
     </div>
 
+    <!-- 图片放大模态框 -->
+    <div id="imageModal" class="image-modal">
+        <span class="close-image-modal">&times;</span>
+        <div class="image-modal-content">
+            <img id="enlargedImg" class="image-modal-img" src="" alt="放大图片">
+        </div>
+    </div>
+
     <!-- 页脚/联系信息 -->
     <footer class="footer" id="contact">
         <div class="contact-info">
@@ -421,9 +482,9 @@
                 title: "岭南文化园博会设计",
                 mainImg: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGRlc2lnbnxlbnwwfHwwfHx8MA%3D%3D",
                 images: [
-                    "https://images.unsplash.com/photo-1584634731339-252c581abfc5?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fHBhcmslMjBkZXNpZ258ZW58MHx8MHx8fDA%3D",
-                    "https://images.unsplash.com/photo-1560703650-76bb0b481b15?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGdhcmRlbiUyMGRlc2lnbnxlbnwwfHwwfHx8MA%3D%3D",
-                    "https://images.unsplash.com/photo-1560717789-0ac7c58ac90a?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y2hpbmVzZSUyMGdhcmRlbnxlbnwwfHwwfHx8MA%3D%3D"
+                    "https://s3.bmp.ovh/imgs/2025/07/12/2e5d63b73c0dff73.jpg",
+                    "https://s3.bmp.ovh/imgs/2025/07/12/6c7553a8f4f34f41.png",
+                    "https://s3.bmp.ovh/imgs/2025/07/12/d65dd4eaae2e3352.png"
                 ],
                 desc: "岭南文化园博会设计项目融合了传统岭南园林艺术与现代景观设计理念，打造了一个集文化展示、休闲娱乐与生态保护于一体的公共空间。项目占地约5公顷，包含传统园林区、现代艺术展示区和水景生态区三大功能区。设计充分考虑了岭南地区的气候特点，采用大量本土植物和传统建筑材料，创造出既具有地域特色又符合现代审美的园林空间。",
                 date: "2023年6月完成"
@@ -441,11 +502,11 @@
             },
             project3: {
                 title: "广州市犀牛路街道改造",
-                mainImg: "https://images.unsplash.com/photo-1467232004584-a241de8b46c3?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c3RyZWV0JTIwZGVzaWdufGVufDB8fDB8fHww",
+                mainImg: "https://s3.bmp.ovh/imgs/2025/07/12/2e5d63b73c0dff73.jpg",
                 images: [
-                    "https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXJiYW4lMjByZW5ld2FsfGVufDB8fDB8fHww",
-                    "https://images.unsplash.com/photo-1584634731339-252c581abfc5?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fHBhcmslMjBkZXNpZ258ZW58MHx8MHx8fDA%3D",
-                    "https://images.unsplash.com/photo-1479839672679-a46483c0e7c8?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cHVibGljJTIwc3BhY2V8ZW58MHx8MHx8fDA%3D"
+                    "https://s3.bmp.ovh/imgs/2025/07/12/85e645c5ad5023e7.png",
+                    "https://s3.bmp.ovh/imgs/2025/07/12/6c7553a8f4f34f41.png",
+                    "https://s3.bmp.ovh/imgs/2025/07/12/d65dd4eaae2e3352.png"
                 ],
                 desc: "广州市犀牛路街道改造项目是对历史街区进行活化再生的典型案例。项目保留了原有的历史建筑风貌，同时引入了现代化的公共设施和商业空间。改造内容包括街道铺装更新、绿化系统升级、历史建筑修缮和公共艺术装置设置。设计特别注重步行体验，拓宽了人行道，增加了休息设施和景观节点，使整个街区既保留了历史韵味，又满足了现代城市生活的需求。",
                 date: "2025年6月完成"
@@ -467,7 +528,7 @@
                 images: [
                     "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bXVzZXVtJTIwZGVzaWdufGVufDB8fDB8fHww",
                     "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8aW50ZXJpb3IlMjBkZXNpZ258ZW58MHx8MHx8fDA%3D",
-                    "https://images.unsplash.com/photo-1588880331179-bc9b93a8cb5e?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZXhoaWJpdGlvbiUyMGhhbGx8ZW58MHx8MHx8fDA%3D"
+                    "https://images.unsplash.com/photo-1588880331179-bc9b93a8cb5e?w=120极0&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZXhoaWJpdGlvbiUyMGhhbGx8ZW58MHx8MHx8fDA%3D"
                 ],
                 desc: "广东工业大学展览馆设计项目是一个集教学、展览和研究功能于一体的综合性空间。建筑外观采用现代简约风格，内部空间则注重灵活性和多功能性。展览馆分为常设展区、临时展区、学术报告厅和研究工作室四大功能区。设计特别注重自然采光和通风，通过巧妙的天窗设计和立面开窗，创造出明亮而节能的室内环境。展览空间采用模块化设计，可根据不同展览需求灵活调整布局。",
                 date: "2022年9月完成"
@@ -494,6 +555,11 @@
         const modalDate = document.getElementById('modalDate');
         const closeModal = document.querySelector('.close-modal');
         const galleryGrid = document.getElementById('galleryGrid');
+        
+        // 图片放大功能相关元素
+        const imageModal = document.getElementById('imageModal');
+        const enlargedImg = document.getElementById('enlargedImg');
+        const closeImageModal = document.querySelector('.close-image-modal');
         
         // 点击网格项目打开模态框
         gridItems.forEach(item => {
@@ -524,6 +590,12 @@
                         img.alt = `${project.title} 图片 ${index + 1}`;
                         img.classList.add('gallery-img');
                         
+                        // 添加点击事件监听器
+                        img.addEventListener('click', (e) => {
+                            e.stopPropagation(); // 防止事件冒泡
+                            showEnlargedImage(src);
+                        });
+                        
                         galleryItem.appendChild(img);
                         galleryGrid.appendChild(galleryItem);
                     });
@@ -534,7 +606,33 @@
             });
         });
         
-        // 关闭模态框
+        // 显示放大图片
+        function showEnlargedImage(src) {
+            enlargedImg.src = src;
+            imageModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        // 关闭图片放大模态框
+        function closeImageModalFunc() {
+            imageModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        // 点击放大图片本身关闭模态框
+        enlargedImg.addEventListener('click', closeImageModalFunc);
+        
+        // 点击关闭按钮关闭图片模态框
+        closeImageModal.addEventListener('click', closeImageModalFunc);
+        
+        // 点击模态框外部关闭图片模态框
+        imageModal.addEventListener('click', (e) => {
+            if (e.target === imageModal) {
+                closeImageModalFunc();
+            }
+        });
+        
+        // 关闭项目模态框
         function closeProjectModal() {
             modal.style.display = 'none';
             document.body.style.overflow = 'auto';
@@ -547,6 +645,11 @@
             if (e.target === modal) {
                 closeProjectModal();
             }
+        });
+        
+        // 项目主图也可以点击放大
+        modalMainImg.addEventListener('click', () => {
+            showEnlargedImage(modalMainImg.src);
         });
         
         // 注册Service Worker
